@@ -69,7 +69,7 @@ public class Antrian extends javax.swing.JFrame {
 
             // Lakukan sesuatu dengan id order yang diambil
             nomorpangLabel.setText(idOrder);
-            jTextPane2.setText("ID Order yang diproses: " + idOrder + "\n\nHarap segera ke loket \ndan melakukan pembayaran\nNomor Antrian\n" + idOrder + "");
+            jTextPane2.setText("ID Order yang diproses: " + idOrder + "\n\nHarap segera ke loket \ndan melakukan pembayaran\nNomor Antrian:\n" + idOrder + "\nSemoga Liburan Anda Menyenangkan ^.^");
             // Update the text of jmlSelesaiLabel
             jmlSelesaiLabel.setText(Integer.toString(processedCount));
             ResultSet hasil = aa.CariData(idO);

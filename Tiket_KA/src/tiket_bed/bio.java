@@ -75,7 +75,7 @@ public class bio extends javax.swing.JFrame {
                 notlp_txt.setText(notel);
                 norek_txt.setText(norek);
                 alamat_txt.setText(alam);
-                if ("Laki laki".equals(jk)) {
+                if ("Laki-laki".equals(jk)) {
                     JKcheckBox1.setSelected(true);
                 } else if ("Perempuan".equals(jk)) {
                     JKcheckBox2.setSelected(true);

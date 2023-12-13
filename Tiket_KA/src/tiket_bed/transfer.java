@@ -112,7 +112,7 @@ public class transfer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        label_foto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/login.jpeg"))); // NOI18N
+        label_foto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/contohNota.jpg"))); // NOI18N
         getContentPane().add(label_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 170, 340, 210));
 
         jButton1.setText("Upload");
