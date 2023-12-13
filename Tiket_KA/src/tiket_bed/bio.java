@@ -61,13 +61,18 @@ public class bio extends javax.swing.JFrame {
                 String notel = hasil.getString("no_tlp");
                 String norek = hasil.getString("norek");
                 String tgl = hasil.getString("tanggal_lahir");
+                if (tgl == null) { 
+                    tgl = "0000-00-00";
+                }
                 String jk = hasil.getString("jk");
                 String alam = hasil.getString("alamat");
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     Date date = dateFormat.parse(tgl);
+                    
                     ttl_txt.setDateFormatString("yyyy-MM-dd");
-                    ttl_txt.setDate(date);
+                    
+                        ttl_txt.setDate(date);
                 } catch (ParseException ex) {
                     Logger.getLogger(bio.class.getName()).log(Level.SEVERE, null, ex);
                 }

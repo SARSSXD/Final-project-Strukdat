@@ -53,8 +53,9 @@ public final class DashboardAdmin extends javax.swing.JFrame {
                     // Proses edit untuk tabel order (Ordertable)
                     Corder o = new Corder();
                     o.setId_order(Integer.parseInt(Ordertable.getValueAt(row, 0).toString()));
-                    o.setStatus(Ordertable.getValueAt(row, 7).toString());
-                    o.ubahData(o.getId_order(), o.getStatus());
+                    o.ubahData(o.getId_order(), "Lunas");
+                    tampil_database();
+                    event();
                 }
             }
 
@@ -229,7 +230,7 @@ public final class DashboardAdmin extends javax.swing.JFrame {
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Make the action column editable, and others non-editable
-                return column == 7 || column == 9; // Assuming "Action" column is at index 9
+                return column == 9; // Assuming "Action" column is at index 9
             }
         };
         Ordertable.setModel(tabmode);
