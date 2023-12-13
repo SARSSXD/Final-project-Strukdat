@@ -4,17 +4,86 @@
  */
 package tiket_bed;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Kautsar Quraisy <220605110162@student.uin-malang.ac.id>
  */
 public class tiket extends javax.swing.JFrame {
 
+    private int selectedItemId;
+    private int iduser;
+
     /**
      * Creates new form tiket
+     *
+     * @param selectedItemId
      */
-    public tiket() {
+    public tiket(int selectedItemId) {
         initComponents();
+        this.selectedItemId = selectedItemId;
+        tampilin();
+        teks();
+    }
+    Corder o = new Corder();
+    Cregister r = new Cregister();
+
+    public int getIduser() {
+        return iduser;
+    }
+
+    public void setIduser(int iduser) {
+        this.iduser = iduser;
+    }
+
+    public void tampilin() {
+        Object[] baris = {"ID Order", "Jumlah Pengunjung", "Tanggal Booking", "Paket", "Metode Pembayaran", "Total Harga"};
+        DefaultTableModel tabmode = new DefaultTableModel(null, baris);
+        tabel.setModel(tabmode);
+        try {
+            ResultSet hasil = o.CariData(selectedItemId);
+            while (hasil.next()) {
+                setIduser(Integer.parseInt(hasil.getString("id_user")));
+                String id = hasil.getString("id_order");
+                String jml = hasil.getString("jml_pengunjung");
+                String tgl = hasil.getString("tanggal");
+                String pkt = hasil.getString("paket");
+                String metod = hasil.getString("metodbyr");
+                String total = hasil.getString("total");
+                String[] data = {id, jml, tgl, pkt, metod, total};
+                tabmode.addRow(data);
+                idorderLaebl.setText("JeKaRu/azek/00" + id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void teks() {
+        ResultSet hasil = r.CariData(getIduser());
+        ResultSet hasil1 = r.CariDataUser(getIduser());
+        try {
+            if (hasil.next()) {
+                String nama = hasil.getString("nama");
+                String email = hasil.getString("email");
+                namaLabel.setText(nama);
+                EmailLabel.setText(email);
+            }
+
+            if (hasil1.next()) {
+                String notel = hasil1.getString("no_tlp");
+                String alamat = hasil1.getString("alamat");
+                notelLabel.setText(notel);
+                alamatLabel.setText("<html>" + alamat.replaceAll("\n", "<br>") + "</html>");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(tiket.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,11 +96,27 @@ public class tiket extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabel = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        idorderLaebl = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        namaLabel = new javax.swing.JLabel();
+        EmailLabel = new javax.swing.JLabel();
+        notelLabel = new javax.swing.JLabel();
+        alamatLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -42,23 +127,87 @@ public class tiket extends javax.swing.JFrame {
                 "#", "Nama ", "Paket", "Tanggal masuk", "Tanggal", "Harga"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tabel.setRowHeight(40);
+        jScrollPane1.setViewportView(tabel);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(423, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
-        );
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 1000, 220));
+
+        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("a/n JeKaRu Tour and Travel");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 230, 20));
+
+        idorderLaebl.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        idorderLaebl.setForeground(new java.awt.Color(0, 0, 0));
+        idorderLaebl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        idorderLaebl.setText("ini id order");
+        getContentPane().add(idorderLaebl, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, 470, 20));
+
+        jLabel4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Blok F Nomor 7");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 200, 20));
+
+        jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Malang, Jawa Timur");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 200, 20));
+
+        jLabel6.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("jekaru@gmail.com");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 200, 20));
+
+        jLabel7.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("085159690099");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 200, 20));
+
+        jLabel8.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("BNI   : 75234892639");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 200, 20));
+
+        jLabel9.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setText("BCA : 98765434567");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 200, 20));
+
+        jLabel10.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("BRI   : 231234324213");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 200, 20));
+
+        jLabel11.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Perumahan Sukoyana V ");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 200, 20));
+
+        namaLabel.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        namaLabel.setForeground(new java.awt.Color(0, 0, 0));
+        namaLabel.setText("ini nama");
+        getContentPane().add(namaLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, 340, 20));
+
+        EmailLabel.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        EmailLabel.setForeground(new java.awt.Color(0, 0, 0));
+        EmailLabel.setText("ini email");
+        getContentPane().add(EmailLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 340, 20));
+
+        notelLabel.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        notelLabel.setForeground(new java.awt.Color(0, 0, 0));
+        notelLabel.setText("ini nomer telpom");
+        getContentPane().add(notelLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 130, 340, 20));
+
+        alamatLabel.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 16)); // NOI18N
+        alamatLabel.setForeground(new java.awt.Color(0, 0, 0));
+        alamatLabel.setText("ini alamat jl.Raya anananananan no.130 a");
+        getContentPane().add(alamatLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 150, 340, 60));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bed6.png"))); // NOI18N
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 600));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -89,15 +238,29 @@ public class tiket extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new tiket().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            login loginFrame = new login();
+            loginFrame.setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel EmailLabel;
+    private javax.swing.JLabel alamatLabel;
+    private javax.swing.JLabel idorderLaebl;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel namaLabel;
+    private javax.swing.JLabel notelLabel;
+    private javax.swing.JTable tabel;
     // End of variables declaration//GEN-END:variables
 }

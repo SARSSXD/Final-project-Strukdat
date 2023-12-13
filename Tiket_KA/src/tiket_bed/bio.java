@@ -4,17 +4,90 @@
  */
 package tiket_bed;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Kautsar Quraisy <220605110162@student.uin-malang.ac.id>
  */
 public class bio extends javax.swing.JFrame {
 
+    private int idUser;
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public static Connection con;
+    public static Statement stm;
+
     /**
      * Creates new form bio_user
+     *
+     * @param idUser
      */
-    public bio() {
+    public bio(int idUser) {
+        this.idUser = idUser;
+
         initComponents();
+        isiComboBox();
+    }
+    private ResultSet hasil;
+    Cbio aa = new Cbio();
+
+    public void isiComboBox() {
+        try {
+            Cregister reg = new Cregister();
+            Cbio b = new Cbio();
+            ResultSet hasilUser = reg.CariData(idUser);
+            ResultSet hasil = b.CariData(idUser);
+
+            while (hasilUser.next()) {
+                String email = hasilUser.getString("email");
+                emailTxt.setText(email);
+            }
+            while (hasil.next()) {
+                String nik = hasil.getString("nik");
+                String notel = hasil.getString("no_tlp");
+                String norek = hasil.getString("norek");
+                String tgl = hasil.getString("tanggal_lahir");
+                String jk = hasil.getString("jk");
+                String alam = hasil.getString("alamat");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date date = dateFormat.parse(tgl);
+                    ttl_txt.setDateFormatString("yyyy-MM-dd");
+                    ttl_txt.setDate(date);
+                } catch (ParseException ex) {
+                    Logger.getLogger(bio.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                nik_txt.setText(nik);
+                notlp_txt.setText(notel);
+                norek_txt.setText(norek);
+                alamat_txt.setText(alam);
+                if ("Laki laki".equals(jk)) {
+                    JKcheckBox1.setSelected(true);
+                } else if ("Perempuan".equals(jk)) {
+                    JKcheckBox2.setSelected(true);
+                }
+
+            }
+
+            // Tutup koneksi setelah selesai menggunakan ResultSet
+            hasilUser.close();
+
+        } catch (SQLException e) {
+        }
     }
 
     /**
@@ -26,74 +99,93 @@ public class bio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        norek_txt = new javax.swing.JTextField();
+        alamat_txt = new javax.swing.JTextField();
+        notlp_txt = new javax.swing.JTextField();
+        nik_txt = new javax.swing.JTextField();
+        Update_btn = new javax.swing.JButton();
+        ttl_txt = new com.toedter.calendar.JDateChooser();
+        JKcheckBox2 = new javax.swing.JCheckBox();
+        JKcheckBox1 = new javax.swing.JCheckBox();
         jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        emailTxt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        norek_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                norek_txtActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 370, -1));
+        getContentPane().add(norek_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 370, -1));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        alamat_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                alamat_txtActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 370, -1));
+        getContentPane().add(alamat_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 420, 370, -1));
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        notlp_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                notlp_txtActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 330, 370, -1));
+        getContentPane().add(notlp_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 370, -1));
 
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        nik_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                nik_txtActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 380, 370, -1));
+        getContentPane().add(nik_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 200, 370, -1));
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        Update_btn.setText("Book Now");
+        Update_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                Update_btnActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 420, 370, -1));
+        getContentPane().add(Update_btn, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 470, -1, -1));
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        ttl_txt.setMinSelectableDate(new java.util.Date(-62135791104000L));
+        getContentPane().add(ttl_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 329, 370, 30));
+
+        JKcheckBox2.setForeground(new java.awt.Color(255, 255, 255));
+        JKcheckBox2.setText("Perempuan");
+        JKcheckBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                JKcheckBox2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 250, 370, -1));
+        getContentPane().add(JKcheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 377, 150, -1));
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        JKcheckBox1.setForeground(new java.awt.Color(255, 255, 255));
+        JKcheckBox1.setText("Laki-laki");
+        JKcheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                JKcheckBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 200, 370, -1));
+        getContentPane().add(JKcheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 377, 140, -1));
 
-        jButton1.setText("Book");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 470, -1, -1));
-
-        jButton2.setText("Update");
+        jButton2.setText("Home");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 470, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("!!! HARAP MENGISI BIODATA SEBELUM BOOKING !!!");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 475, 300, 20));
+        getContentPane().add(emailTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 370, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bed4.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 600));
@@ -101,33 +193,90 @@ public class bio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void norek_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_norek_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_norek_txtActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void alamat_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alamat_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_alamat_txtActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void notlp_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notlp_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_notlp_txtActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void nik_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nik_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_nik_txtActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    private void Update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Update_btnActionPerformed
+        if (emailTxt.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Maaf, Email belum diisi !");
+            emailTxt.requestFocus();
+        } else if (nik_txt.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Maaf, NIK belum diisi !");
+            nik_txt.requestFocus();
+        } else if (notlp_txt.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Maaf, Nomer telepon belum diisi !");
+            notlp_txt.requestFocus();
+        } else if (norek_txt.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Maaf, Nomer Rekening belum diisi !");
+            norek_txt.requestFocus();
+        } else if (ttl_txt.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Maaf, Tanggal Lahir belum diisi !");
+            ttl_txt.requestFocus();
+        } else if (!JKcheckBox1.isSelected() && !JKcheckBox2.isSelected()) {
+            JOptionPane.showMessageDialog(null, "Maaf, Jenis Kelamin belum diisi !");
+            JKcheckBox1.requestFocus();
+        } else if (alamat_txt.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Maaf, Alamat belum diisi !");
+            alamat_txt.requestFocus();
+        } else {
+            try {
+                hasil = aa.CariData(emailTxt.getText());
+                if (hasil.next()) {
+                    String id = hasil.getString("id_user");
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String strDate = dateFormat.format(ttl_txt.getDate());
+                    String strjk = null;
+                    if (JKcheckBox1.isSelected()) {
+                        strjk = JKcheckBox1.getText();
+                    } else if (JKcheckBox2.isSelected()) {
+                        strjk = JKcheckBox2.getText();
+                    }
+                    aa.setId_user(Integer.parseInt(id));
+                    aa.setNik(nik_txt.getText());
+                    aa.setNo_tlp(notlp_txt.getText());
+                    aa.setNorek(norek_txt.getText());
+                    aa.setTanggal_lahir(strDate);
+                    aa.setJk(strjk);
+                    aa.setAlamat(alamat_txt.getText());
+                    aa.ubahData(aa.getId_user(), aa.getNik(), aa.getNo_tlp(), aa.getNorek(),
+                            aa.getTanggal_lahir(), aa.getJk(), aa.getAlamat());
+                    dispose();
+                    tiket_book edit = new tiket_book(getIdUser());
+                    edit.setVisible(true);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(bio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(ttl_txt.getDateFormatString());
+        }
+    }//GEN-LAST:event_Update_btnActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void JKcheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JKcheckBox2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_JKcheckBox2ActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void JKcheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JKcheckBox1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_JKcheckBox1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        dispose();
+        home h = new home(getIdUser());
+        h.setVisible(true);// TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,23 +307,25 @@ public class bio extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new bio().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            login loginFrame = new login();
+            loginFrame.setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBox JKcheckBox1;
+    private javax.swing.JCheckBox JKcheckBox2;
+    private javax.swing.JButton Update_btn;
+    private javax.swing.JTextField alamat_txt;
+    private javax.swing.JTextField emailTxt;
     private javax.swing.JButton jButton2;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField nik_txt;
+    private javax.swing.JTextField norek_txt;
+    private javax.swing.JTextField notlp_txt;
+    private com.toedter.calendar.JDateChooser ttl_txt;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,10 @@
  */
 package tiket_bed;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +22,8 @@ public class register extends javax.swing.JFrame {
     public register() {
         initComponents();
     }
-
     Cregister aa = new Cregister();
+    Cbio bb = new Cbio();
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -97,11 +101,11 @@ public class register extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_passwordActionPerformed
 
     private void txt_namaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_namaActionPerformed
-        // TODO add your handling code here:
+        txt_email.requestFocus();        // TODO add your handling code here:
     }//GEN-LAST:event_txt_namaActionPerformed
 
     private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
-        // TODO add your handling code here:
+        txt_password.requestFocus();        // TODO add your handling code here:
     }//GEN-LAST:event_txt_usernameActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -117,7 +121,7 @@ public class register extends javax.swing.JFrame {
         } else if (txt_email.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Email belum diisi !");
             txt_email.requestFocus();
-        }else if (txt_username.getText().trim().equals("")) {
+        } else if (txt_username.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(null, "Maaf, Username belum diisi !");
             txt_username.requestFocus();
         } else if (txt_password.getText().trim().equals("")) {
@@ -125,20 +129,29 @@ public class register extends javax.swing.JFrame {
             txt_password.requestFocus();
         } else {
             try {
+                String email = txt_email.getText();
                 aa.setNama(txt_nama.getText());
-                aa.setNama(txt_email.getText());
+                aa.setEmail(txt_email.getText());
                 aa.setUsername(txt_username.getText());
                 aa.setPassword(txt_password.getText());
                 aa.regisData(aa.getNama(), aa.getEmail(), aa.getUsername(), aa.getPassword());
+                ResultSet hasil = aa.CariData(aa.getId_user());
+                if (hasil.next()) {
+                    String id = hasil.getString("id_user");
+                    bb.setId_user(Integer.parseInt(id));
+                }
+                bb.addData(bb.getId_user(), 0, 0, 0, null, null, null);
                 dispose();
             } catch (NumberFormatException e) {
 
+            } catch (SQLException ex) {
+                Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, ex);
             }
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
-        // TODO add your handling code here:
+        txt_username.requestFocus();        // TODO add your handling code here:
     }//GEN-LAST:event_txt_emailActionPerformed
 
     /**
@@ -172,10 +185,8 @@ public class register extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new register().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new register().setVisible(true);
         });
     }
 

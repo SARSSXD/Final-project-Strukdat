@@ -8,6 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -78,12 +82,17 @@ public class Cregister {
         String message = "";
         try {
             register reg = new register();
-            CRUDpsmt = CRUDkoneksi.prepareStatement(CRUDquery);
+            CRUDpsmt = CRUDkoneksi.prepareStatement(CRUDquery, Statement.RETURN_GENERATED_KEYS);
             CRUDpsmt.setString(1, nama);
             CRUDpsmt.setString(2, email);
             CRUDpsmt.setString(3, username);
             CRUDpsmt.setString(4, password);
             CRUDpsmt.executeUpdate();
+            ResultSet generatedKeys = CRUDpsmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int idUser = generatedKeys.getInt(1);
+                setId_user(idUser);
+            }
             CRUDpsmt.close();
             message = " Berhasil Dilakukan";
             JOptionPane.showMessageDialog(null, "Register" + message);
@@ -96,5 +105,88 @@ public class Cregister {
             System.out.println(e);
         }
         return null;
+    }
+
+    public String ubahData(int id_user, String nama, String email, String username, String password) {
+        CRUDquery = "update user set nama=?, email=?, username=?, password=? where id_user=?";
+        String message = "";
+        try {
+            CRUDpsmt = CRUDkoneksi.prepareStatement(CRUDquery);
+            CRUDpsmt.setString(1, nama);
+            CRUDpsmt.setString(2, email);
+            CRUDpsmt.setString(3, username);
+            CRUDpsmt.setString(4, password);
+            CRUDpsmt.setInt(5, id_user);
+            CRUDpsmt.executeUpdate();
+            CRUDpsmt.close();
+            message = " Berhasil Dilakukan";
+            JOptionPane.showMessageDialog(null, "Ubah Data" + message);
+        } catch (Exception e) {
+            message = " Gagal Dilakukan";
+            JOptionPane.showMessageDialog(null, "Ubah Data" + message);
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public ResultSet tampilData() {
+        ResultSet hasil = null;
+        String CRUDquery = "SELECT * FROM user";
+        try {
+            Statement CRUDstat = CRUDkoneksi.createStatement();
+            hasil = CRUDstat.executeQuery(CRUDquery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return hasil;
+    }
+
+    public ResultSet CariData(int id_user) {
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT * FROM user WHERE id_user = ?";
+            PreparedStatement preparedStatement = CRUDkoneksi.prepareStatement(query);
+            preparedStatement.setInt(1, id_user);
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet CariDataUser(int id_user) {
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT * FROM data_user WHERE id_user = ?";
+            PreparedStatement preparedStatement = CRUDkoneksi.prepareStatement(query);
+            preparedStatement.setInt(1, id_user);
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public static void bubbleSort(JTable table, int columnIndex) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        int n = model.getRowCount();
+        boolean swapped;
+        do {
+            swapped = false;
+            for (int i = 0; i < n - 1; i++) {
+                String current = (String) model.getValueAt(i, columnIndex);
+                String next = (String) model.getValueAt(i + 1, columnIndex);
+                if (current.compareTo(next) > 0) { //ascending jika current lebih besar dari next maka swap
+                    // Swap rows if needed
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        Object temp = model.getValueAt(i, j);
+                        model.setValueAt(model.getValueAt(i + 1, j), i, j);
+                        model.setValueAt(temp, i + 1, j);
+                    }
+                    swapped = true;
+                }
+            }
+            n--;
+        } while (swapped);
     }
 }

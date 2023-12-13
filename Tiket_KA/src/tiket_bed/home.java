@@ -4,17 +4,48 @@
  */
 package tiket_bed;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Kautsar Quraisy <220605110162@student.uin-malang.ac.id>
  */
 public class home extends javax.swing.JFrame {
 
+    private int idUser;
+
     /**
      * Creates new form Home
+     *
+     * @param idUser
      */
-    public home() {
+    public home(int idUser) {
+        this.idUser = idUser;
         initComponents();
+        isijcombobox();
+    }
+    Corder o = new Corder();
+    Cregister r = new Cregister();
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void isijcombobox() {
+        ResultSet hasil = o.tampilData(getIdUser());
+        try {
+            while (hasil.next()) {
+                String ID = hasil.getString("id_order");
+                idOrderComboBox.addItem(ID);
+            }
+            hasil.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,6 +58,9 @@ public class home extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        idOrderComboBox = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -40,7 +74,28 @@ public class home extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, 150, 50));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 290, 150, 50));
+
+        jButton2.setBackground(new java.awt.Color(102, 102, 255));
+        jButton2.setFont(new java.awt.Font("Gill Sans Ultra Bold", 0, 11)); // NOI18N
+        jButton2.setText("CHECK TICKET");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 350, 150, 50));
+
+        idOrderComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih ID Order" }));
+        getContentPane().add(idOrderComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 400, 150, -1));
+
+        jButton3.setText("Log Out");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 0, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bed2.png"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -52,9 +107,61 @@ public class home extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         dispose();
-        tiket_book edit = new tiket_book();
+        bio edit = new bio(getIdUser());
         edit.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int ID = Integer.parseInt(idOrderComboBox.getItemAt(idOrderComboBox.getSelectedIndex()));
+        ResultSet hasil = o.CariData(ID);
+        try {
+            while (hasil.next()) {
+                String stat = hasil.getString("status");
+                String bukti = hasil.getString("buktibyr");
+                String metod = hasil.getString("metodbyr");
+                int id_user = Integer.parseInt(hasil.getString("id_user"));
+                ResultSet hasil1 = r.CariData(id_user);
+                while (hasil1.next()) {
+                    String password = hasil1.getString("password");
+                    if ("Lunas".equals(stat)) {
+                        String pw = JOptionPane.showInputDialog("Enter Password!");
+                        if (password.equals(pw)) {
+                            dispose();
+                            tiket t = new tiket(ID);
+                            t.setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Password Yang Anda Masukkan Salah!");
+                        }
+                    } else {
+                        if ("Transfer".equals(metod)) {
+
+                            if (bukti == null) {
+                                JOptionPane.showMessageDialog(null, "Maaf, Transaksi Anda " + stat + "\nMohon Upload Bukti Pembayaran!");
+                                dispose();
+                                transfer tf = new transfer(getIdUser());
+                                tf.setVisible(true);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Maaf, Transaksi Anda " + "Belum Diverifikasi mohon tunggu");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Nomor Antrian Anda Adalah " + ID);
+                        }
+
+                    }
+                }
+            }
+
+            // TODO add your handling code here:
+        } catch (SQLException ex) {
+            Logger.getLogger(home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        dispose();
+        login l = new login();
+        l.setVisible(true);// TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -85,15 +192,17 @@ public class home extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new home().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            login loginFrame = new login();
+            loginFrame.setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> idOrderComboBox;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

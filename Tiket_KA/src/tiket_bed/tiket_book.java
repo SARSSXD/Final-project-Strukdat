@@ -4,17 +4,53 @@
  */
 package tiket_bed;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Kautsar Quraisy <220605110162@student.uin-malang.ac.id>
  */
 public class tiket_book extends javax.swing.JFrame {
 
+    private int idUser;
+
+    public int getIdUser() {
+        return idUser;
+    }
+
     /**
      * Creates new form ticket_book
+     *
+     * @param idUser
      */
-    public tiket_book() {
+    public tiket_book(int idUser) {
+        this.idUser = idUser;
         initComponents();
+        tampil_textfield();
+    }
+    private ResultSet hasil;
+    Corder aa = new Corder();
+
+    public void tampil_textfield() {
+        try {
+            nama_txt.setEditable(false);
+            emailTxt.setEditable(false);
+            nama_txt.setFocusable(false);
+            emailTxt.setFocusable(false);
+            hasil = aa.CariDataBook(idUser);
+            if (hasil.next()) {
+                String data = hasil.getString("nama");
+                String mail = hasil.getString("email");
+                nama_txt.setText(data);
+                emailTxt.setText(mail);
+            }
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -26,34 +62,46 @@ public class tiket_book extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        nama_txt = new javax.swing.JTextField();
+        jmlpengunjungTxt = new javax.swing.JTextField();
+        tglbookTxt = new com.toedter.calendar.JDateChooser();
+        paketjComboBox1 = new javax.swing.JComboBox<>();
+        methodByrjComboBox2 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        emailTxt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 280, 220, 30));
-        getContentPane().add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 400, 200, 30));
-        getContentPane().add(jDateChooser1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 339, 220, 30));
+        getContentPane().add(nama_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 280, 220, 30));
+        getContentPane().add(jmlpengunjungTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 400, 200, 30));
+        getContentPane().add(tglbookTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 339, 220, 30));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 460, 220, 30));
+        paketjComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Paket 1", "Paket 2", "Paket 3" }));
+        getContentPane().add(paketjComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 460, 220, 30));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Transfer", "Tunai" }));
-        getContentPane().add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 514, 220, 30));
+        methodByrjComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Transfer", "Tunai" }));
+        getContentPane().add(methodByrjComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 514, 220, 30));
 
         jButton1.setBackground(new java.awt.Color(0, 102, 204));
-        jButton1.setText("BOOK NOW !");
+        jButton1.setText("BOOK NOW!");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(533, 560, 180, 40));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 560, 180, 40));
+
+        jButton2.setBackground(new java.awt.Color(0, 102, 204));
+        jButton2.setText("HOME");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 560, 180, 40));
+        getContentPane().add(emailTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 230, 220, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bed3.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 600));
@@ -63,10 +111,64 @@ public class tiket_book extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        dispose();
-        tiket edit = new tiket();
-        edit.setVisible(true);        // TODO add your handling code here:
+        if (tglbookTxt.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Maaf, Tanggal Booking belum diisi !");
+            tglbookTxt.requestFocus();
+        } else if (jmlpengunjungTxt.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Maaf, Jumlah Pengunjung belum diisi !");
+            jmlpengunjungTxt.requestFocus();
+        } else {
+            try {
+                String email = emailTxt.getText();
+                hasil = aa.CariData(email);
+                if (hasil.next()) {
+                    String id = hasil.getString("id_user");
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String strDate = dateFormat.format(tglbookTxt.getDate());
+                    aa.setId_user(Integer.parseInt(id));
+                    aa.setTanggal(strDate);
+                    aa.setJml_pengunjung(Integer.parseInt(jmlpengunjungTxt.getText()));
+                    aa.setPaket(paketjComboBox1.getItemAt(paketjComboBox1.getSelectedIndex()));
+                    aa.setMetodbyr(methodByrjComboBox2.getItemAt(methodByrjComboBox2.getSelectedIndex()));
+                    int harga = 0;
+                    if (null != aa.getPaket()) {
+                        switch (aa.getPaket()) {
+                            case "Paket 1" ->
+                                harga = 10000 * aa.getJml_pengunjung();
+                            case "Paket 2" ->
+                                harga = 20000 * aa.getJml_pengunjung();
+                            case "Paket 3" ->
+                                harga = 30000 * aa.getJml_pengunjung();
+                            default -> {
+                            }
+                        }
+                    }
+                    String total = "Rp. " + Integer.toString(harga);
+                    aa.setTotal(email);
+                    aa.addData(aa.getId_user(), aa.getJml_pengunjung(), aa.getTanggal(),
+                            aa.getPaket(), aa.getMetodbyr(), null, "Belum Lunas", total);
+                    if ("Tunai".equals(aa.getMetodbyr())) {
+                        dispose();
+                        home h = new home(aa.getId_user());
+                        h.setVisible(true);
+                    } else {
+                        dispose();
+                        transfer tf = new transfer(getIdUser());
+                        tf.setVisible(true);
+                    }
+                    // TODO add your handling code here:
+                }
+            } catch (SQLException | NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        dispose();
+        home h = new home(getIdUser());
+        h.setVisible(true);// TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -97,20 +199,21 @@ public class tiket_book extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new tiket_book().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            login loginFrame = new login();
+            loginFrame.setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField emailTxt;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jmlpengunjungTxt;
+    private javax.swing.JComboBox<String> methodByrjComboBox2;
+    private javax.swing.JTextField nama_txt;
+    private javax.swing.JComboBox<String> paketjComboBox1;
+    private com.toedter.calendar.JDateChooser tglbookTxt;
     // End of variables declaration//GEN-END:variables
 }

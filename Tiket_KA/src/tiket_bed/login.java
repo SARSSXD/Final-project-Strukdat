@@ -30,7 +30,7 @@ public class login extends javax.swing.JFrame {
             con = DriverManager.getConnection(url, user, pass);
             stm = con.createStatement();
             System.out.println("koneksi berhasil;");
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.err.println("koneksi gagal" + e.getMessage());
         }
     }
@@ -52,6 +52,12 @@ public class login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        usernameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usernameFieldActionPerformed(evt);
+            }
+        });
         getContentPane().add(usernameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 260, 260, 30));
 
         jButton1.setText("LOGIN");
@@ -70,6 +76,12 @@ public class login extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 360, 190, 20));
+
+        PasswordField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PasswordFieldActionPerformed(evt);
+            }
+        });
         getContentPane().add(PasswordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 260, 30));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/bed.png"))); // NOI18N
@@ -104,7 +116,7 @@ public class login extends javax.swing.JFrame {
                         da.setLocationRelativeTo(null);
                         this.dispose();
                     } else {
-                        home hm = new home();
+                        home hm = new home(Integer.parseInt(rs.getString("id_user")));
                         hm.setVisible(true);
                         hm.setLocationRelativeTo(null);
                         this.dispose();
@@ -116,7 +128,6 @@ public class login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "User belum terdaftar");
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -125,6 +136,14 @@ public class login extends javax.swing.JFrame {
         register edit = new register();
         edit.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
+        PasswordField.requestFocus();        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameFieldActionPerformed
+
+    private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordFieldActionPerformed
+        jButton1ActionPerformed(evt);        // TODO add your handling code here:
+    }//GEN-LAST:event_PasswordFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,10 +173,8 @@ public class login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new login().setVisible(true);
         });
     }
 
